@@ -37,7 +37,7 @@ async function main() {
   const tx = await ballotContract.vote(proposal_num);
   console.log("Awaiting confirmations");
   await tx.wait();
-  console.log(`Transaction completed. Hash: ${tx.hash}`);
+  console.log(`Successfully voted for proposal no. ${proposal_num}. Hash: ${tx.hash}`);
 }
 
 main().catch((error) => {
