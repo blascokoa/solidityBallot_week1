@@ -85,10 +85,24 @@ describe("Ballot", function () {
     });
   });
 
-  describe("when the voter interact with the vote function in the contract", function () {
-    // TODO
-    it("is not implemented", async function () {
-      throw new Error("Not implemented");
+  describe("when the voter interact with the vote function in the contract", async function () {
+    it("User got voting rights", async function () {
+      await giveRightToVote(ballotContract, accounts[1].address);
+      const voterInfo = await ballotContract.voters(accounts[1].address);
+      expect(voterInfo.weight.toNumber()).to.eq(1);
+    });
+
+    it("user didn't voted before", async function () {
+      await giveRightToVote(ballotContract, accounts[1].address);
+      const voterInfo = await ballotContract.voters(accounts[1].address);
+      expect(voterInfo.voted).to.eq(false);
+    });
+
+    it("Vote count increase in 1", async function () {
+      await giveRightToVote(ballotContract, accounts[1].address);
+      await ballotContract.vote(0);
+      const proposalDetail = await ballotContract.proposals(0);
+      expect(proposalDetail.voteCount.toNumber()).to.eq(1);
     });
   });
 
