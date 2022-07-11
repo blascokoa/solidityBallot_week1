@@ -115,7 +115,7 @@ contract Ballot {
     /// Give your vote (including votes delegated to you)
     /// to proposal `proposals[proposal].name`.
     function vote(uint256 proposal) external {
-        Voter storage sender = voters[msg.sender];
+        Voter memory sender = voters[msg.sender];
         require(sender.weight != 0, "Has no right to vote");
         require(!sender.voted, "Already voted.");
         sender.voted = true;
@@ -131,9 +131,12 @@ contract Ballot {
     /// previous votes into account.
     function winningProposal() public view returns (uint256 winningProposal_) {
         uint256 winningVoteCount = 0;
-        for (uint256 p = 0; p < proposals.length; p++) {
-            if (proposals[p].voteCount > winningVoteCount) {
-                winningVoteCount = proposals[p].voteCount;
+        uint256 voteCount = 0;
+        uint256 proposalsLength = proposals.length;
+        for (uint256 p = 0; p < proposalsLength; p++) {
+            voteCount = proposals[p].voteCount;
+            if (voteCount > winningVoteCount) {
+                winningVoteCount = voteCount;
                 winningProposal_ = p;
             }
         }
